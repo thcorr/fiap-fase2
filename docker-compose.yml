@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  home:
+    build:
+      context: ./home
+    ports:
+      - "4444:3000"
+    environment:
+      - LOGGED_URL=http://logged:3000
+      - BACKEND_URL=http://backend:3000
+    depends_on:
+      - logged
+      - backend
+    networks:
+      - app-network
+
+  logged:
+    build:
+      context: ./logged
+    ports:
+      - "7777:3000"
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
