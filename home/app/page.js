@@ -8,9 +8,6 @@ export default function Home() {
       <MainHeader />
       <MainBody />
       <MainFooter />
-      <a href="/logged">
-        <h2>LOGGED PAGE</h2>
-      </a>
     </div>
   );
 }

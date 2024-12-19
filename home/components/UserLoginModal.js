@@ -81,7 +81,7 @@ const UserLoginModal = ({ closeModal }) => {
         </form>
 
         <button className="cancel-btn" onClick={closeModal}>
-          Cancelar
+          Fechar
         </button>
       </div>
     </div>

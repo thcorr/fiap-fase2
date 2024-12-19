@@ -29,7 +29,6 @@ const UserRegisterModal = ({ closeModal }) => {
         setMessage(data.message);
         console.log("Response from backend:", response);
         console.log("Response Data:", data);
-        closeModal();
       }
     } catch (error) {
       setMessage("Erro: " + error.message);
@@ -67,7 +66,7 @@ const UserRegisterModal = ({ closeModal }) => {
         </form>
 
         <button className="cancel-btn" onClick={closeModal}>
-          Cancelar
+          Fechar
         </button>
       </div>
     </div>
