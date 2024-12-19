@@ -7,6 +7,8 @@ const app = new Express();
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocs = require("./swagger");
 const UserController = require("./controller/User");
+require("dotenv").config({ path: ".env.local" });
+const PORT = process.env.PORT || 8080;
 
 app.use(cors());
 app.use(Express.json());
@@ -26,8 +28,8 @@ app.use((req, res, next) => {
 app.use(routes);
 
 connectDB().then(() => {
-  app.listen(3000, () => {
-    console.log("Servidor rodando na porta 3000");
+  app.listen(PORT, () => {
+    console.log("Servidor rodando na porta " + PORT);
   });
 });
 

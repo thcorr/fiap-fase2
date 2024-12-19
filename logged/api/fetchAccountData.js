@@ -1,5 +1,6 @@
 export async function fetchAccountData(token) {
   try {
+    console.log(`${process.env.NEXT_PUBLIC_BACKEND_URL}/account`);
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/account`,
       {

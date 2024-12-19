@@ -3,19 +3,21 @@ FROM node:18 AS builder
 WORKDIR /app
 
 COPY ./package*.json ./
-
 RUN npm install
+
+ARG NEXT_PUBLIC_LOGGED_URL
+ARG NEXT_PUBLIC_BACKEND_URL
+
+ENV NEXT_PUBLIC_LOGGED_URL=${NEXT_PUBLIC_LOGGED_URL}
+ENV NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
 
 COPY . ./
 
 RUN npm run build
 
 FROM node:18-slim
-
 WORKDIR /app
-
 COPY --from=builder /app ./
 
-EXPOSE 3000
-
+EXPOSE 8080
 CMD ["npm", "start"]

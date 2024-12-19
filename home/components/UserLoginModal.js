@@ -41,7 +41,7 @@ const UserLoginModal = ({ closeModal }) => {
         setMessage("Login com sucess!");
         closeModal();
 
-        const redirectUrl = `${process.env.NEXT_PUBLIC_LOGGED_URL}/logged`;
+        const redirectUrl = `${process.env.NEXT_PUBLIC_LOGGED_URL}/logged?token=${token}`;
         console.log("Redirecionando para:", redirectUrl);
 
         window.location.href = redirectUrl;

@@ -4,24 +4,31 @@ services:
   home:
     build:
       context: ./home
+      args:
+        NEXT_PUBLIC_LOGGED_URL: http://localhost:7777
+        NEXT_PUBLIC_BACKEND_URL: http://localhost:3000
     ports:
       - "4444:3000"
-    environment:
-      - LOGGED_URL=http://logged:3000
-      - BACKEND_URL=http://backend:3000
     depends_on:
       - logged
       - backend
     networks:
       - app-network
+    environment:
+      NEXT_PUBLIC_LOGGED_URL: http://localhost:7777
+      NEXT_PUBLIC_BACKEND_URL: http://localhost:3000
 
   logged:
     build:
       context: ./logged
+      args:
+        NEXT_PUBLIC_BACKEND_URL: http://localhost:3000
     ports:
       - "7777:3000"
     networks:
       - app-network
+    environment:
+      NEXT_PUBLIC_BACKEND_URL: http://localhost:3000
 
   backend:
     build:

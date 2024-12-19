@@ -43,7 +43,7 @@ export const DashboardMainCard = () => {
   return (
     <div className="flex flex-col h-full mx-12 lg:mx-2.5 bg-[#1B263B] text-[#E0E1DD] rounded-xl">
       <div className="flex flex-col p-8 space-y-8">
-        <div className="text-3xl lg:text-4xl">Olá, Thomas! :)</div>
+        <div className="text-3xl lg:text-4xl">Olá! :)</div>
         <div className="text-xl">{currentDate}</div>
       </div>
       <div className="flex flex-col ml-auto mr-12 lg:mr-20 space-y-5 mt-16 mb-12">

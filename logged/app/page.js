@@ -1,59 +1,66 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { fetchAccountData } from "@/api/fetchAccountData";
-import { DashboardHeader } from "@/components/DashboardHeader";
-import { parseCookies } from "nookies";
+import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { useAccountStore } from "@/store/accountStore";
+import { fetchAccountData } from "@/api/fetchAccountData";
 import { fetchStatement } from "@/api/transactionService";
+import { DashboardHeader } from "@/components/DashboardHeader";
 import { DashboardMenu } from "@/components/DashboardMenu";
 import DashboardBody from "@/components/DashboardBody";
 
-export default function DashboardHome() {
+function DashboardContent() {
   const [error, setError] = useState(null);
-  const accountData = useAccountStore((state) => state.accountData);
-  const token = useAccountStore((state) => state.token);
+  const searchParams = useSearchParams();
+  const setZustandToken = useAccountStore((state) => state.setToken);
   const setZustandAccountData = useAccountStore(
     (state) => state.setAccountData
   );
-  const setZustandToken = useAccountStore((state) => state.setToken);
+  const accountData = useAccountStore((state) => state.accountData);
+  const token = useAccountStore((state) => state.token);
 
   useEffect(() => {
     const fetchInitialData = async () => {
-      try {
-        const cookies = parseCookies();
-        const authToken = cookies.authToken;
+      const queryToken = searchParams.get("token");
 
-        if (!authToken) {
-          setError("No token found. Please log in.");
-          return;
-        }
+      if (!queryToken && !token) {
+        setError("No token found. Please log in.");
+        return;
+      }
 
-        if (!token) {
-          setZustandToken(authToken);
-        }
+      const authToken = queryToken || token;
 
-        if (!accountData) {
+      if (!token) {
+        setZustandToken(authToken);
+      }
+
+      if (!accountData) {
+        try {
           const fetchedAccountData = await fetchAccountData(authToken);
-          console.log("Fetched Account Data:", fetchedAccountData);
           setZustandAccountData(fetchedAccountData);
 
           const accountId = fetchedAccountData?.result?.account[0]?.id;
           if (accountId) {
             await fetchStatement(accountId, authToken);
-            console.log("Transactions Fetched...");
           } else {
             setError("Account ID is missing.");
           }
+        } catch (err) {
+          console.error("Error fetching initial data:", err);
+          setError(err.message);
         }
-      } catch (err) {
-        console.error("Error fetching initial data:", err);
-        setError(err.message);
       }
     };
 
     fetchInitialData();
-  }, [accountData, token, setZustandAccountData, setZustandToken]);
+  }, [
+    searchParams,
+    accountData,
+    token,
+    setZustandAccountData,
+    setZustandToken,
+  ]);
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -75,5 +82,13 @@ export default function DashboardHome() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function DashboardHome() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <DashboardContent />
+    </Suspense>
   );
 }
